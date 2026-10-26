@@ -387,3 +387,10 @@ html.su-lock { overflow: hidden; }
 .su-no { margin-top: 14px; background: none; border: 0; color: var(--muted); font: inherit; font-size: .875rem; text-decoration: underline; padding: 10px; cursor: pointer; }
 .su-no:hover { color: var(--text); }
 @media (prefers-reduced-motion: reduce) { .su-overlay, .su-box { transition: none; } }
+
+/* ---------------- LOGO IMAGE (assets/logo.png) ---------------- */
+.wordmark { transform: none; text-shadow: none; padding: 0; line-height: 0; }
+.wordmark img { display: block; width: clamp(190px, 56vw, 300px); height: auto; filter: drop-shadow(0 0 14px var(--glow)); }
+.sticky-bar .wordmark { padding: 0; line-height: 0; }
+.sticky-bar .wordmark img { width: auto; height: 60px; filter: none; }
+@media (min-width: 800px) { .wordmark img { width: 320px; } }
