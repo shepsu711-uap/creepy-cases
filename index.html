@@ -4,14 +4,14 @@
   HOW TO EDIT  (Creepy Cases — plain HTML + CSS, no framework)
   ============================================================
   SWAP THE SHOP TILE PHOTO   Jogo's tile below is one <img>. Change its src="" to another file in
-                   assets/photos/ (e.g. src="assets/photos/jogo-white.jpg") and update alt="".
-  JOGO'S PHOTO CAROUSEL      Lives in product.html (open it and read the HOW TO EDIT note at the top).
-  PRODUCT 2 (THIRD EYE POSSESSED)         Its carousel lives in product-2.html. "Third Eye Possessed" is a PLACEHOLDER name: change the <h3> in its
+                   assets/photos/ (e.g. src="assets/photos/jogo-cutout-white.jpg") and update alt="".
+  JOGO'S PRODUCT PAGE        Lives in product.html (open it and read the HOW TO EDIT note at the top): photos, description, details, reviews.
+  PRODUCT 2 (THIRD EYE POSSESSED)         Its page lives in product-2.html. "Third Eye Possessed" is a PLACEHOLDER name: change the <h3> in its
                              tile below, plus the <title> and <h1> in product-2.html. Price is still the placeholder [$ price].
                    Add / remove / reorder = add, delete, or move one <li class="slide"> line.
   SWAP A PHOTO   Put your image in /assets/photos, then change the src="" to its file name.
   A PLACEHOLDER  The dark box that says PHOTO COMING is a stand-in.
-                 Delete the whole <div class="ph">…</div> line and paste this in its place:
+                 Delete the whole <div class="ph">…</div> line and paste this in its place (use a real photo at least 1200 wide):
                  <img src="assets/photos/your-photo.jpg" alt="Describe it" width="1200" height="1500" loading="lazy">
                  (wrap it in <a href="product.html">…</a> if it should open a product page)
   CHANGE TEXT    Edit the words inside <h3> (name) and <p class="price"> (price).
@@ -63,7 +63,7 @@
         <li class="card">
           <a class="card-link" href="product.html" aria-label="Jogo — view photos">
             <div class="media">
-              <img src="assets/photos/jogo-black.jpg" alt="Blue one-eyed clay monster lighter case with a brown clay top, studio photo on a black background" width="748" height="936" loading="lazy">
+              <img src="assets/photos/jogo-cutout-black.jpg" alt="Blue one-eyed clay monster lighter case with a brown clay top, studio photo on a black background" width="1200" height="1500" loading="lazy">
             </div>
             <h3>Jogo</h3>
             <p class="price">Not for sale</p>
@@ -74,7 +74,7 @@
         <li class="card">
           <a class="card-link" href="product-2.html" aria-label="Third Eye Possessed — view photos">
             <div class="media">
-              <img src="assets/photos/p2-face-black.jpg" alt="Clay lighter case with a sculpted grinning face and three eyes, studio photo on a black background" width="1200" height="1500" loading="lazy">
+              <img src="assets/photos/p2-face-black.jpg" alt="Clay lighter case with a sculpted grinning face and three eyes, studio photo on a black background" width="1600" height="2000" loading="lazy">
             </div>
             <h3>Third Eye Possessed</h3>
             <p class="price">[$ price]</p>
