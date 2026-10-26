@@ -1,0 +1,79 @@
+<!doctype html>
+<!--
+  ============================================================
+  HOW TO EDIT THE CAROUSEL  (product.html)
+  ============================================================
+  ADD A PHOTO      Copy one <li class="slide">…</li> line, paste it where you want it, change the file name.
+  REMOVE A PHOTO   Delete its <li class="slide">…</li> line.
+  REORDER          Cut a line and paste it somewhere else. The FIRST one is what people see first.
+  FILES            Put photos in assets/photos/. Best shape is 4:5 (tall), about 1200 x 1500.
+  COUNTER "1 / 10" Updates by itself. No numbers to change.
+  NAME / PRICE     Change the <h1> and the <p class="price"> under the photos.
+  SHOP TILE PHOTO  The picture on the shop page is set in index.html (the Jogo <li class="card">).
+  ============================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <title>Jogo — Creepy Cases by WAR</title>
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Space+Grotesk:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="index.html" aria-label="Creepy Cases — home">Creepy Cases</a>
+  </header>
+
+  <a class="back" href="index.html#shop">← Shop</a>
+
+  <main class="product">
+    <div class="carousel" id="carousel">
+      <!-- swipe left / right. One <li> per photo. -->
+      <ul class="slides" id="slides" aria-label="Jogo photos">
+        <li class="slide"><img src="assets/photos/jogo-black.jpg"      alt="Jogo, blue one-eyed clay lighter case, clean studio photo on black" width="748" height="936"></li>
+        <li class="slide"><img src="assets/photos/jogo-white.jpg"      alt="Jogo on a white background" width="748" height="936" loading="lazy"></li>
+        <li class="slide"><img src="assets/photos/jogo-gray.jpg"       alt="Jogo on a gray background" width="748" height="936" loading="lazy"></li>
+        <li class="slide"><img src="assets/photos/jogo-warm-light.jpg" alt="Jogo in warm light" width="748" height="936" loading="lazy"></li>
+        <li class="slide"><img src="assets/photos/jogo-spotlight.jpg"  alt="Jogo under a spotlight" width="748" height="936" loading="lazy"></li>
+        <li class="slide"><img src="assets/photos/jogo-cream-light.jpg" alt="Jogo in soft cream light" width="748" height="936" loading="lazy"></li>
+        <li class="slide"><img src="assets/photos/jogo-topdown-black.jpg" alt="Jogo seen from above on black" width="748" height="936" loading="lazy"></li>
+        <li class="slide"><img src="assets/photos/jogo-pattern.jpg"    alt="Jogo on a pattern of the words Creepy Cases, half in shadow, eye glowing green" width="1200" height="1500" loading="lazy"></li>
+        <li class="slide"><img src="assets/photos/jogo-glow-black.jpg" alt="Jogo half in shadow with a soft green glow around the eye" width="1200" height="1500" loading="lazy"></li>
+        <li class="slide"><img src="assets/photos/jogo-progress.jpg"   alt="Jogo in progress: unpainted clay version held in a hand" width="960" height="1200" loading="lazy"></li>
+      </ul>
+      <button class="arrow prev" type="button" aria-label="Previous photo">‹</button>
+      <button class="arrow next" type="button" aria-label="Next photo">›</button>
+      <span class="count" id="count" aria-live="polite">1 / 1</span>
+    </div>
+
+    <div class="product-info">
+      <h1>Jogo</h1>
+      <p class="price">Not for sale</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 WAR</p>
+    <p><a href="policies.html">Shipping &amp; Policies</a> · <a href="https://www.tiktok.com/@rain.art.warr" target="_blank" rel="noopener noreferrer">TikTok @rain.art.warr</a></p>
+  </footer>
+
+  <!-- tiny script: arrows + "1 / 10" counter. The carousel still swipes without it. -->
+  <script>
+    document.documentElement.classList.add('js');
+    var s = document.getElementById('slides'), c = document.getElementById('count');
+    var n = s.children.length, i = function () { return Math.round(s.scrollLeft / s.clientWidth); };
+    function show() { c.textContent = (i() + 1) + ' / ' + n; }
+    function go(d) { s.scrollTo({ left: (i() + d) * s.clientWidth, behavior: 'smooth' }); }
+    s.addEventListener('scroll', show); window.addEventListener('resize', show); show();
+    document.querySelector('.prev').onclick = function () { go(-1); };
+    document.querySelector('.next').onclick = function () { go(1); };
+    s.tabIndex = 0;
+    s.addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') go(1); if (e.key === 'ArrowLeft') go(-1); });
+  </script>
+</body>
+</html>

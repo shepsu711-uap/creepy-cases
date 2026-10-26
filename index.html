@@ -1,0 +1,126 @@
+<!doctype html>
+<!--
+  ============================================================
+  HOW TO EDIT  (Creepy Cases — plain HTML + CSS, no framework)
+  ============================================================
+  SWAP THE SHOP TILE PHOTO   Jogo's tile below is one <img>. Change its src="" to another file in
+                   assets/photos/ (e.g. src="assets/photos/jogo-white.jpg") and update alt="".
+  JOGO'S PHOTO CAROUSEL      Lives in product.html (open it and read the HOW TO EDIT note at the top).
+  PRODUCT 2 (THIRD EYE POSSESSED)         Its carousel lives in product-2.html. "Third Eye Possessed" is a PLACEHOLDER name: change the <h3> in its
+                             tile below, plus the <title> and <h1> in product-2.html. Price is still the placeholder [$ price].
+                   Add / remove / reorder = add, delete, or move one <li class="slide"> line.
+  SWAP A PHOTO   Put your image in /assets/photos, then change the src="" to its file name.
+  A PLACEHOLDER  The dark box that says PHOTO COMING is a stand-in.
+                 Delete the whole <div class="ph">…</div> line and paste this in its place:
+                 <img src="assets/photos/your-photo.jpg" alt="Describe it" width="1200" height="1500" loading="lazy">
+                 (wrap it in <a href="product.html">…</a> if it should open a product page)
+  CHANGE TEXT    Edit the words inside <h3> (name) and <p class="price"> (price).
+  ADD A PRODUCT  Copy a whole block from "<li class="card">" to its closing "</li>"
+                 and paste it right after another one inside the same <ul>.
+  REMOVE ONE     Delete its <li class="card"> … </li> block.
+  PILL ON PHOTO  <span class="pill">Sold out</span> — change the words, or delete the line.
+  NEW SECTION    Copy a whole <section> block. Change its id and <h2>.
+  COLORS / FONTS All at the very top of style.css (the :root block).
+  CONTACT LINK   Search this file for tiktok.com and change it if it moves.
+  ============================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <title>Creepy Cases by WAR</title>
+  <meta name="description" content="Handmade clay lighter cases by WAR.">
+  <link rel="icon" href="data:,">
+
+  <!-- Fonts live in assets/fonts. Google Fonts below is only a backup if those files are missing. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Space+Grotesk:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to products</a>
+
+  <!-- HEADER: wordmark + 3 links -->
+  <header class="site-header">
+    <a class="wordmark" href="#top" id="top" aria-label="Creepy Cases — home">Creepy Cases</a>
+    <nav aria-label="Main">
+      <a href="#shop">Shop</a>
+      <a href="#archive">Archive</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ================= SHOP ================= -->
+    <section id="shop" class="section" aria-labelledby="shop-h">
+      <h2 id="shop-h">Shop</h2>
+      <ul class="grid">
+
+        <!-- PRODUCT 1: Jogo — taps through to product.html (the photo carousel) -->
+        <li class="card">
+          <a class="card-link" href="product.html" aria-label="Jogo — view photos">
+            <div class="media">
+              <img src="assets/photos/jogo-black.jpg" alt="Blue one-eyed clay monster lighter case with a brown clay top, studio photo on a black background" width="748" height="936" loading="lazy">
+            </div>
+            <h3>Jogo</h3>
+            <p class="price">Not for sale</p>
+          </a>
+        </li>
+
+        <!-- PRODUCT 2: Third Eye Possessed (PLACEHOLDER name, placeholder price) — taps through to product-2.html -->
+        <li class="card">
+          <a class="card-link" href="product-2.html" aria-label="Third Eye Possessed — view photos">
+            <div class="media">
+              <img src="assets/photos/p2-face-black.jpg" alt="Clay lighter case with a sculpted grinning face and three eyes, studio photo on a black background" width="1200" height="1500" loading="lazy">
+            </div>
+            <h3>Third Eye Possessed</h3>
+            <p class="price">[$ price]</p>
+          </a>
+        </li>
+
+      </ul>
+    </section>
+
+    <!-- ================= ARCHIVE ================= -->
+    <section id="archive" class="section" aria-labelledby="archive-h">
+      <h2 id="archive-h">Archive</h2>
+      <ul class="grid">
+
+        <!-- PRODUCT: placeholder (past piece) -->
+        <li class="card">
+          <div class="media">
+            <div class="ph" role="img" aria-label="Photo coming soon"><span>Photo coming</span></div>
+          </div>
+          <h3>[Name]</h3>
+          <p class="price">[$ price]</p>
+        </li>
+
+        <!-- PRODUCT: placeholder (past piece) -->
+        <li class="card">
+          <div class="media">
+            <div class="ph" role="img" aria-label="Photo coming soon"><span>Photo coming</span></div>
+          </div>
+          <h3>[Name]</h3>
+          <p class="price">[$ price]</p>
+        </li>
+
+      </ul>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section id="contact" class="section contact" aria-labelledby="contact-h">
+      <h2 id="contact-h">Contact</h2>
+      <p>Custom cases — <a href="https://www.tiktok.com/@rain.art.warr" target="_blank" rel="noopener noreferrer">message me on TikTok</a></p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 WAR</p>
+    <p><a href="policies.html">Shipping &amp; Policies</a> · <a href="https://www.tiktok.com/@rain.art.warr" target="_blank" rel="noopener noreferrer">TikTok @rain.art.warr</a></p>
+  </footer>
+</body>
+</html>
