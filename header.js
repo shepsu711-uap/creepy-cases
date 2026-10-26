@@ -1,5 +1,5 @@
 /* header.js — the small bar that appears at the top (title + menu), the same way Shopify's own themes do it:
-   scroll DOWN and it tucks away so it never covers the photos; scroll UP a little and it slides back in.
+   once you scroll past the big title, a slim bar with the small logo + menu stays at the top the whole way down.
    It is a fixed overlay, so it never changes the page layout and can't make scrolling jitter.
    You should not need to edit this. The look is in style.css under ".sticky-bar". */
 (function () {
@@ -19,9 +19,7 @@
     var y = Math.max(0, window.scrollY || document.documentElement.scrollTop);
     var limit = h.offsetHeight;
     var d = y - last;
-    if (y <= limit) { set(false); upDistance = 0; }
-    else if (d > 0) { set(false); upDistance = 0; }          /* scrolling down: hide */
-    else if (d < 0) { upDistance -= d; if (upDistance > 12) set(true); }  /* scrolling up: show */
+    set(y > limit);                                  /* past the big header: bar stays visible */
     last = y;
   }
   window.addEventListener('scroll', function () {

@@ -394,3 +394,10 @@ html.su-lock { overflow: hidden; }
 .sticky-bar .wordmark { padding: 0; line-height: 0; }
 .sticky-bar .wordmark img { width: auto; height: 60px; filter: none; }
 @media (min-width: 800px) { .wordmark img { width: 320px; } }
+
+/* v10: slim always-visible top bar (logo left, menu right) once you scroll past the big title */
+.sticky-bar { display: flex; align-items: center; justify-content: space-between; padding: 6px var(--gutter); text-align: left; }
+.sticky-bar .wordmark img { height: 44px; }
+.sticky-bar nav { gap: 0; }
+.sticky-bar nav a { padding: 8px 9px; font-size: .875rem; }
+@media (min-width: 800px) { .sticky-bar { padding: 8px 32px; } .sticky-bar .wordmark img { height: 52px; width: auto; } .sticky-bar nav a { padding: 8px 14px; font-size: .9375rem; } }
