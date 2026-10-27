@@ -8,7 +8,8 @@
       To preview it yourself any time, open the site with  ?signup=preview  on the end of the address.
    Everything you may want to edit is in this first block. */
 var SIGNUP = {
-  FORM_URL: 'PASTE-FORM-ADDRESS-HERE',        // <-- THE ONE-LINE SWITCH. e.g. 'https://formspree.io/f/abcdwxyz'
+  FORM_URL: 'https://formspree.io/f/xljjjklk',        // <-- THE ONE-LINE SWITCH. e.g. 'https://formspree.io/f/abcdwxyz'
+  SOURCE: '',                                  // leave empty: the page name is sent (e.g. index.html). Tests set this to 'utu-test'
   EXTRA_FIELDS: {},                            // only for some form services, e.g. { access_key: 'YOUR-KEY' } for Web3Forms
   BAR_TEXT: 'LIGHTER CASE $35 \u2192 $30 \u00b7 TAP TO SIGN UP',
   TITLE: 'Get $5 off your first case',
@@ -66,7 +67,7 @@ var SIGNUP = {
         '<label for="su-phone">Phone <span>(optional, for texts)</span></label>' +
         '<input id="su-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(555) 555-5555">' +
         '<label class="su-consent"><input type="checkbox" name="sms_consent" value="yes"> <span>Yes, text me my $5 off and new drops. Msg &amp; data rates may apply. Reply STOP anytime to opt out.</span></label>' +
-        '<input type="text" name="website" class="su-hp" tabindex="-1" autocomplete="off" aria-hidden="true">' +
+        '<input type="text" name="_gotcha" class="su-hp" tabindex="-1" autocomplete="off" aria-hidden="true">' +
         '<p class="su-err" role="alert" hidden></p>' +
         '<button type="submit" class="btn su-go">' + SIGNUP.BUTTON + '</button>' +
         '<p class="su-priv">We\u2019ll send the $5 off by email or text. <a href="privacy.html">Privacy</a></p>' +
@@ -123,15 +124,20 @@ var SIGNUP = {
     var email = form.email.value.trim(), phone = form.phone.value.trim();
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { showErr('Please enter a valid email.'); form.email.focus(); return; }
     if (phone && !form.sms_consent.checked) { showErr('Check the box if you want texts, or clear the phone number.'); return; }
-    if (form.website.value) return;                          // bots fill the hidden field
+    if (form._gotcha.value) return;                          // bots fill the hidden field
     function ok(msg) { form.hidden = true; done.textContent = msg; done.hidden = false; if (!preview) snooze(); }
-    if (!connected) { ok('Preview only: nothing was saved.'); return; }
+    if (!connected || preview) { ok('Preview only: nothing was saved.'); return; }   /* preview never sends anything */
     var btn = form.querySelector('.su-go'); btn.disabled = true; btn.textContent = 'Sending\u2026';
-    var fd = new FormData(form); fd.delete('website');
+    var fd = new FormData();
+    fd.append('email', email); fd.append('phone', phone);
+    fd.append('text_opt_in', form.sms_consent.checked ? 'yes' : 'no');
+    fd.append('source', SIGNUP.SOURCE || location.pathname.split('/').pop() || 'home');
+    fd.append('_gotcha', '');                                // hidden spam trap, always empty from real people
     for (var k in SIGNUP.EXTRA_FIELDS) fd.append(k, SIGNUP.EXTRA_FIELDS[k]);
     fetch(SIGNUP.FORM_URL, { method: 'POST', body: fd, headers: { Accept: 'application/json' } })
-      .then(function (r) { if (!r.ok) throw 0; if (window.ccTrack) window.ccTrack('signup_submit'); ok('You\u2019re on the list. Thank you! We\u2019ll send your $5 off by email or text.'); })
-      .catch(function () { btn.disabled = false; btn.textContent = SIGNUP.BUTTON; showErr('Something went wrong. Please try again.'); });
+      .then(function (r) { return r.json().then(function (j) { return { r: r, j: j || {} }; }, function () { return { r: r, j: {} }; }); })
+      .then(function (x) { if (!x.r.ok || x.j.ok === false) throw 0; if (window.ccTrack) window.ccTrack('signup_submit'); ok('You\u2019re on the list. Thank you! We\u2019ll send your $5 off by email or text.'); })
+      .catch(function (e) { cc.errors.push("send: " + (e && e.message || e)); btn.disabled = false; btn.textContent = SIGNUP.BUTTON; showErr('Sorry, that didn\u2019t go through, so nothing was saved. Please check your connection and try again.'); });
   });
   }
   try { init(); } catch (e) { cc.errors.push('signup.js: ' + (e && e.message)); }
