@@ -303,6 +303,8 @@ main { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
 .btn-line { background: transparent; color: var(--text); border-color: var(--muted); }
 .btn-line:hover { border-color: var(--lime); }
 .note-line { margin-top: 10px; color: var(--muted); font-size: .9375rem; line-height: 1.5; }
+.ship-note { padding-left: 12px; border-left: 2px solid var(--lime); }
+#shop > .ship-note { margin-top: 18px; max-width: 46rem; }
 .desc { margin-top: 20px; font-size: 1.0625rem; line-height: 1.65; }
 .info h2 { margin-top: 24px; font-size: 1rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
 .facts { margin-top: 8px; }

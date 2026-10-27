@@ -16,7 +16,6 @@
     BUY BUTTON       Find "BUY BUTTON" below. It says how to turn it into a real PayPal / Stripe link.
     DESCRIPTION      The <p class="desc"> paragraph.       DETAILS   The bullet list under "Details". Fill in the [size] bracket.
     SHIPPING TEXT    The "Shipping &amp; Returns" box. Keep it matching policies.html if you change numbers there.
-  REVIEWS            See the big HOW TO ADD REAL REVIEWS note further down. The boxes are SAMPLES, not real people.
   YOU MAY ALSO LIKE  The other product's tile near the bottom.
   SHOP TILE PHOTO    The picture on the shop page is set in index.html (this product's <li class="card">).
   ============================================================
@@ -32,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Space+Grotesk:wght@400;500;600&display=swap">
-  <link rel="stylesheet" href="style.css?v=14">
+  <link rel="stylesheet" href="style.css?v=15">
 </head>
 <body>
   <header class="site-header">
@@ -63,7 +62,6 @@
       <!-- ================= INFO PANEL ================= -->
       <section class="info" aria-labelledby="name">
         <h1 id="name">Jogo</h1>
-        <a class="rating" href="#reviews"><span class="stars" aria-hidden="true">☆☆☆☆☆</span> <span>No reviews yet</span></a>
         <p class="price">Not for sale</p>
 
         <!-- BUY BUTTON: Jogo is an archive piece, so there is no buy button, only a link to ask about a custom case.
@@ -96,54 +94,6 @@
       </section>
     </div>
 
-    <!-- ================= REVIEWS =================
-      HOW TO ADD REAL REVIEWS (read this):
-      1. The three boxes below are SAMPLE placeholders so you can see the layout. They are NOT real customers.
-         Only ever show REAL reviews from people who actually bought and said it. Never invent names or quotes.
-      2. For each real review: edit one <article class="review"> box.
-           - delete the <span class="sample-tag"> line
-           - set the stars: replace ☆☆☆☆☆ with filled ★ for the rating, e.g. ★★★★★ (5) or ★★★★☆ (4), and change aria-label="No rating" to e.g. aria-label="5 out of 5 stars"
-           - type the title, the review text, and "First name · Month Year" (ask permission to use their name)
-      3. Update the summary line: change "No reviews yet" to e.g. "4.8 out of 5 · 3 reviews", and fill the stars in the summary
-         (the <span class="stars"> above it). Also change the "No reviews yet" link near the price at the top of this page.
-      4. Out of reviews to show? Delete the leftover SAMPLE boxes. If you have none, you can delete this whole section.
-      "Write a review" sends people to your TikTok DM. Change the link if you get an email or form. -->
-    <section id="reviews" class="below" aria-labelledby="reviews-h">
-      <div class="reviews-head">
-        <div>
-          <h2 id="reviews-h">Reviews</h2>
-          <p class="sum"><span class="stars" role="img" aria-label="No rating yet">☆☆☆☆☆</span> <span>No reviews yet</span></p>
-        </div>
-        <a class="btn btn-line" href="https://www.tiktok.com/@rain.art.warr" target="_blank" rel="noopener noreferrer">Write a review (DM me on TikTok)</a>
-      </div>
-      <div class="review-list">
-        <!-- SAMPLE review card 1. Replace the whole <article> with a real review, or delete it. -->
-        <article class="review">
-          <span class="sample-tag">SAMPLE — replace with a real review</span>
-          <span class="stars" role="img" aria-label="No rating">☆☆☆☆☆</span>
-          <h3>Review title goes here</h3>
-          <p>Your customer's review goes here.</p>
-          <p class="who">First name · Month Year</p>
-        </article>
-        <!-- SAMPLE review card 2. Replace the whole <article> with a real review, or delete it. -->
-        <article class="review">
-          <span class="sample-tag">SAMPLE — replace with a real review</span>
-          <span class="stars" role="img" aria-label="No rating">☆☆☆☆☆</span>
-          <h3>Review title goes here</h3>
-          <p>Your customer's review goes here.</p>
-          <p class="who">First name · Month Year</p>
-        </article>
-        <!-- SAMPLE review card 3. Replace the whole <article> with a real review, or delete it. -->
-        <article class="review">
-          <span class="sample-tag">SAMPLE — replace with a real review</span>
-          <span class="stars" role="img" aria-label="No rating">☆☆☆☆☆</span>
-          <h3>Review title goes here</h3>
-          <p>Your customer's review goes here.</p>
-          <p class="who">First name · Month Year</p>
-        </article>
-      </div>
-    </section>
-
     <!-- ================= YOU MAY ALSO LIKE ================= (copy of the other product's shop tile; update if its photo, name or price changes) -->
     <section class="below" aria-labelledby="more-h">
       <h2 id="more-h">You may also like</h2>
@@ -167,9 +117,9 @@
     <p><a href="policies.html">Shipping &amp; Policies</a> · <a href="privacy.html">Privacy</a> · <a href="https://www.tiktok.com/@rain.art.warr" target="_blank" rel="noopener noreferrer">TikTok @rain.art.warr</a></p>
   </footer>
 
-  <script src="product.js?v=14"></script>
-  <script src="analytics.js?v=14"></script>
-  <script src="header.js?v=14"></script>
-<script src="signup.js?v=14"></script>
+  <script src="product.js?v=15"></script>
+  <script src="analytics.js?v=15"></script>
+  <script src="header.js?v=15"></script>
+<script src="signup.js?v=15"></script>
 </body>
 </html>
