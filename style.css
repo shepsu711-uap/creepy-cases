@@ -290,6 +290,8 @@ main { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
 .rating:hover { color: var(--text); text-decoration: underline; text-decoration-color: var(--lime); text-underline-offset: 4px; }
 .stars { letter-spacing: .12em; color: var(--muted); font-size: 1.05rem; }
 .info .price { margin-top: 10px; color: var(--text); font-size: 1.5rem; font-weight: 500; }
+.info .signup-price { margin-top: 4px; font-size: 1rem; }
+.info .signup-price a { color: var(--lime); }
 .btn {
   display: block; width: 100%; margin-top: 16px; padding: 15px 18px; text-align: center;
   background: var(--lime); color: #000; font-weight: 600; font-size: 1.0625rem;

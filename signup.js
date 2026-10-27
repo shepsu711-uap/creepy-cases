@@ -7,9 +7,9 @@
    Everything you may want to edit is in this first block. */
 var SIGNUP = {
   FORM_URL: 'PASTE-FORM-ADDRESS-HERE',        // e.g. 'https://formspree.io/f/abcdwxyz'
-  TITLE: 'Get first dibs on new cases',
-  TEXT: 'New clay lighter cases drop in small batches. Leave your email and I\u2019ll let you know before they\u2019re gone.',
-  BUTTON: 'Notify me',
+  TITLE: 'Get $5 off your first lighter case',
+  TEXT: 'Sign up with your email (add your phone if you want texts) and we\u2019ll send you $5 off your first lighter case by email or text.',
+  BUTTON: 'Get $5 off',
   DELAY_MS: 1500,                              // how long after the page opens before it pops up
   HIDE_DAYS: 14                                // after someone closes it or signs up, wait this many days
 };
@@ -35,7 +35,7 @@ var SIGNUP = {
         '<input id="su-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" required>' +
         '<label for="su-phone">Phone <span>(optional, for text alerts)</span></label>' +
         '<input id="su-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(555) 555-5555">' +
-        '<label class="su-consent"><input type="checkbox" name="sms_consent" value="yes"> <span>Yes, text me about new drops. Msg &amp; data rates may apply. Reply STOP anytime to opt out.</span></label>' +
+        '<label class="su-consent"><input type="checkbox" name="sms_consent" value="yes"> <span>Yes, text me my $5 off and new drops. Msg &amp; data rates may apply. Reply STOP anytime to opt out.</span></label>' +
         '<input type="text" name="website" class="su-hp" tabindex="-1" autocomplete="off" aria-hidden="true">' +
         '<p class="su-err" role="alert" hidden></p>' +
         '<button type="submit" class="btn su-go">' + SIGNUP.BUTTON + '</button>' +
@@ -44,6 +44,10 @@ var SIGNUP = {
       '<button type="button" class="su-no">No thanks</button>' +
     '</div>';
   document.body.appendChild(o);
+  Array.prototype.forEach.call(document.querySelectorAll('[data-signup-link]'), function (a) {
+    a.hidden = false;
+    a.addEventListener('click', function (e) { e.preventDefault(); open(); });
+  });
   var box = o.querySelector('.su-box'), form = o.querySelector('form'), err = o.querySelector('.su-err'),
       done = o.querySelector('.su-done'), lastFocus;
   function open() {
@@ -82,7 +86,7 @@ var SIGNUP = {
     var btn = form.querySelector('.su-go'); btn.disabled = true; btn.textContent = 'Sending\u2026';
     var fd = new FormData(form); fd.delete('website');
     fetch(SIGNUP.FORM_URL, { method: 'POST', body: fd, headers: { Accept: 'application/json' } })
-      .then(function (r) { if (!r.ok) throw 0; ok('You\u2019re on the list. Thank you!'); })
+      .then(function (r) { if (!r.ok) throw 0; ok('You\u2019re on the list. Thank you! We\u2019ll send your $5 off by email or text.'); })
       .catch(function () { btn.disabled = false; btn.textContent = SIGNUP.BUTTON; showErr('Something went wrong. Please try again.'); });
   });
   setTimeout(open, preview ? 600 : SIGNUP.DELAY_MS);
