@@ -52,6 +52,7 @@ var SIGNUP = {
       done = o.querySelector('.su-done'), lastFocus;
   function open() {
     lastFocus = document.activeElement; o.hidden = false;
+    if (!preview && window.ccTrack) window.ccTrack('open_signup_popup');
     requestAnimationFrame(function () { o.classList.add('on'); o.querySelector('#su-email').focus({ preventScroll: true }); });
     document.documentElement.classList.add('su-lock');
   }
@@ -86,7 +87,7 @@ var SIGNUP = {
     var btn = form.querySelector('.su-go'); btn.disabled = true; btn.textContent = 'Sending\u2026';
     var fd = new FormData(form); fd.delete('website');
     fetch(SIGNUP.FORM_URL, { method: 'POST', body: fd, headers: { Accept: 'application/json' } })
-      .then(function (r) { if (!r.ok) throw 0; ok('You\u2019re on the list. Thank you! We\u2019ll send your $5 off by email or text.'); })
+      .then(function (r) { if (!r.ok) throw 0; if (window.ccTrack) window.ccTrack('signup_submit'); ok('You\u2019re on the list. Thank you! We\u2019ll send your $5 off by email or text.'); })
       .catch(function () { btn.disabled = false; btn.textContent = SIGNUP.BUTTON; showErr('Something went wrong. Please try again.'); });
   });
   setTimeout(open, preview ? 600 : SIGNUP.DELAY_MS);
