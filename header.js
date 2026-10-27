@@ -17,7 +17,7 @@
   function check() {
     ticking = false;
     var y = Math.max(0, window.scrollY || document.documentElement.scrollTop);
-    var limit = h.offsetHeight;
+    var limit = h.offsetTop + h.offsetHeight;   /* counts anything above the header (the announcement bar) */
     var d = y - last;
     set(y > limit);                                  /* past the big header: bar stays visible */
     last = y;

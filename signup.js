@@ -1,42 +1,51 @@
-/* signup.js — the small "$5 off" sign-up tab at the bottom of the screen (email + optional phone).
-   Shown on every page except Policies and Privacy. It slides in after a couple of seconds, expands when tapped,
-   and can be closed with the X (it then stays away for 7 days).
+/* signup.js — the thin scrolling announcement bar at the very top of the page ("LIGHTER CASE $35 → $30 · TAP TO SIGN UP")
+   and the small sign-up form (email + optional phone) that opens when the bar is tapped.
+   Shown on every page except Policies and Privacy. The bar is part of the page, so it scrolls away normally.
    ============================ HOW TO TURN IT ON ============================
    1. Make a free form that collects entries (Formspree.io is easiest; steps are in ANALYTICS-SETUP.md).
    2. Paste its web address between the quotes on the FORM_URL line below. That one line is the only switch.
-   3. Until you do, the tab is HIDDEN for visitors (so nobody types into nothing).
+   3. Until you do, the bar is HIDDEN for visitors (so nobody types into nothing).
       To preview it yourself any time, open the site with  ?signup=preview  on the end of the address.
    Everything you may want to edit is in this first block. */
 var SIGNUP = {
   FORM_URL: 'PASTE-FORM-ADDRESS-HERE',        // <-- THE ONE-LINE SWITCH. e.g. 'https://formspree.io/f/abcdwxyz'
   EXTRA_FIELDS: {},                            // only for some form services, e.g. { access_key: 'YOUR-KEY' } for Web3Forms
-  TITLE: 'Lighter case $35 \u2192 $30',
-  SUBLINE: 'Get $5 off your first case when you sign up for texts or email.',
+  BAR_TEXT: 'LIGHTER CASE $35 \u2192 $30 \u00b7 TAP TO SIGN UP',
+  TITLE: 'Get $5 off your first case',
+  TEXT: 'Sign up with your email (add your phone if you want texts) and we\u2019ll send you $5 off your first case by email or text.',
   BUTTON: 'Get $5 off',
-  DELAY_MS: 2500,                              // how long after the page opens before the tab slides in
-  HIDE_DAYS: 7                                 // after someone closes it or signs up, stay away this many days
+  HIDE_DAYS: 7                                 // after someone signs up, hide the bar this many days
 };
 (function () {
   if (/policies\.html|privacy\.html/.test(location.pathname)) return;
   var preview = /[?&]signup=preview/.test(location.search);
   var connected = SIGNUP.FORM_URL.indexOf('PASTE') === -1;
   if (!connected && !preview) return;
-  var KEY = 'cc-signup-until', SKEY = 'cc-signup-shown';
+  var KEY = 'cc-signup-until';
   function snoozed() { try { return Date.now() < Number(localStorage.getItem(KEY) || 0); } catch (e) { return false; } }
   function snooze() { try { localStorage.setItem(KEY, String(Date.now() + SIGNUP.HIDE_DAYS * 864e5)); } catch (e) {} }
-  function shownThisSession() { try { return !!sessionStorage.getItem(SKEY); } catch (e) { return false; } }
-  var blocked = !preview && (snoozed() || shownThisSession());
 
-  var t = document.createElement('aside');
-  t.className = 'su-tab'; t.hidden = true; t.setAttribute('aria-label', 'Sign-up offer');
-  t.innerHTML =
-    '<button type="button" class="su-x" aria-label="Close sign-up offer">\u00d7</button>' +
-    '<button type="button" class="su-head" aria-expanded="false" aria-controls="su-panel">' +
-      '<strong id="su-title">' + SIGNUP.TITLE + '</strong>' +
-      '<span class="su-sub">' + SIGNUP.SUBLINE + '</span>' +
-      '<span class="su-cta">Tap to sign up</span>' +
-    '</button>' +
-    '<div class="su-panel" id="su-panel" hidden>' +
+  /* ---- the announcement bar (first thing in <body>, above the header) ---- */
+  var bar = null;
+  if (preview || !snoozed()) {
+    var item = '<span class="ab-item">' + SIGNUP.BAR_TEXT + '</span>', group = '';
+    for (var n = 0; n < 8; n++) group += item;
+    bar = document.createElement('button');
+    bar.type = 'button'; bar.className = 'announce';
+    bar.setAttribute('aria-haspopup', 'dialog');
+    bar.setAttribute('aria-label', SIGNUP.BAR_TEXT.replace('\u2192', 'to').replace('\u00b7', '.').toLowerCase());
+    bar.innerHTML = '<span class="ab-track" aria-hidden="true"><span class="ab-group">' + group + '</span><span class="ab-group">' + group + '</span></span>';
+    document.body.insertBefore(bar, document.body.firstChild);
+  }
+
+  /* ---- the sign-up form (opens in a small sheet) ---- */
+  var o = document.createElement('div');
+  o.className = 'su-overlay'; o.hidden = true;
+  o.innerHTML =
+    '<div class="su-box" role="dialog" aria-modal="true" aria-labelledby="su-title">' +
+      '<button type="button" class="su-x" aria-label="Close">\u00d7</button>' +
+      '<h2 id="su-title">' + SIGNUP.TITLE + '</h2>' +
+      '<p class="su-text">' + SIGNUP.TEXT + '</p>' +
       '<form class="su-form" novalidate>' +
         '<label for="su-email">Email</label>' +
         '<input id="su-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" required>' +
@@ -50,36 +59,39 @@ var SIGNUP = {
       '</form>' +
       '<p class="su-done" hidden></p>' +
     '</div>';
-  document.body.appendChild(t);
-  var head = t.querySelector('.su-head'), panel = t.querySelector('.su-panel'),
-      form = t.querySelector('form'), err = t.querySelector('.su-err'), done = t.querySelector('.su-done');
-
-  function show() {
-    if (!t.hidden) return;
-    t.hidden = false;
-    try { sessionStorage.setItem(SKEY, '1'); } catch (e) {}
+  document.body.appendChild(o);
+  var box = o.querySelector('.su-box'), form = o.querySelector('form'), err = o.querySelector('.su-err'),
+      done = o.querySelector('.su-done'), lastFocus;
+  function open() {
+    lastFocus = document.activeElement; o.hidden = false;
     if (!preview && window.ccTrack) window.ccTrack('open_signup_popup');
-    requestAnimationFrame(function () { requestAnimationFrame(function () { t.classList.add('on'); }); });
+    requestAnimationFrame(function () { o.classList.add('on'); try { o.querySelector('#su-email').focus({ preventScroll: true }); } catch (e) {} });
+    document.documentElement.classList.add('su-lock');
   }
-  function expand(focus) {
-    show();
-    panel.hidden = false; head.setAttribute('aria-expanded', 'true'); t.classList.add('open');
-    if (focus) setTimeout(function () { try { t.querySelector('#su-email').focus({ preventScroll: true }); } catch (e) {} }, 50);
-  }
-  function collapse() { panel.hidden = true; head.setAttribute('aria-expanded', 'false'); t.classList.remove('open'); }
   function close() {
-    t.classList.remove('on'); setTimeout(function () { t.hidden = true; }, 300); snooze();
+    o.classList.remove('on'); document.documentElement.classList.remove('su-lock');
+    setTimeout(function () { o.hidden = true; }, 250);
+    if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
   }
-  head.onclick = function () { if (panel.hidden) expand(true); else collapse(); };
-  t.querySelector('.su-x').onclick = close;
-  t.addEventListener('keydown', function (e) { if (e.key === 'Escape') { if (!panel.hidden) { collapse(); head.focus(); } else close(); } });
-
-  // links on the page (data-signup-link) open the form directly
+  if (bar) bar.addEventListener('click', open);
   Array.prototype.forEach.call(document.querySelectorAll('[data-signup-link]'), function (a) {
     a.hidden = false;
-    a.addEventListener('click', function (e) { e.preventDefault(); expand(true); });
+    a.addEventListener('click', function (e) { e.preventDefault(); open(); });
   });
-
+  o.querySelector('.su-x').onclick = close;
+  o.addEventListener('mousedown', function (e) { if (e.target === o) close(); });
+  document.addEventListener('keydown', function (e) {
+    if (o.hidden) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'Tab') {                                   // keep Tab inside the form
+      var f = box.querySelectorAll('button:not([hidden]), input:not(.su-hp), a[href]');
+      f = Array.prototype.filter.call(f, function (x) { return x.offsetParent !== null; });
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
   function showErr(m) { err.textContent = m; err.hidden = false; }
   form.addEventListener('submit', function (e) {
     e.preventDefault(); err.hidden = true;
@@ -96,6 +108,4 @@ var SIGNUP = {
       .then(function (r) { if (!r.ok) throw 0; if (window.ccTrack) window.ccTrack('signup_submit'); ok('You\u2019re on the list. Thank you! We\u2019ll send your $5 off by email or text.'); })
       .catch(function () { btn.disabled = false; btn.textContent = SIGNUP.BUTTON; showErr('Something went wrong. Please try again.'); });
   });
-  if (!blocked) setTimeout(show, SIGNUP.DELAY_MS);
-
 })();

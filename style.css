@@ -351,26 +351,45 @@ main { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
 .policies p { margin-top: 8px; font-size: 1.0625rem; line-height: 1.6; color: var(--text); }
 .policies a { text-decoration-color: var(--lime); text-underline-offset: 5px; }
 
-/* ---------------- SIGN-UP TAB (signup.js) ---------------- */
-.su-tab {
-  position: fixed; z-index: 90; left: 10px; right: 10px; bottom: 10px; max-width: 420px; margin: 0 auto;
-  background: #0a0a0a; border: 1px solid #2a2a2a; border-top: 2px solid var(--lime);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, .7); text-align: left;
-  transform: translateY(130%); opacity: 0; transition: transform .35s cubic-bezier(.22, .61, .36, 1), opacity .3s ease;
-  max-height: calc(100vh - 20px); max-height: calc(100dvh - 20px); overflow-y: auto;
+/* ---------------- ANNOUNCEMENT BAR + SIGN-UP FORM (signup.js) ---------------- */
+.announce {
+  display: block; width: 100%; height: 30px; padding: 0; margin: 0; overflow: hidden; position: relative; z-index: 1;
+  background: #000; color: var(--text); border: 0; border-bottom: 1px solid var(--lime); cursor: pointer;
+  font: inherit; font-size: .75rem; font-weight: 600; letter-spacing: .08em; line-height: 30px; text-align: left; white-space: nowrap;
 }
-.su-tab[hidden] { display: none; }
-.su-tab.on { transform: none; opacity: 1; }
-@media (min-width: 800px) { .su-tab { left: auto; right: 20px; bottom: 20px; margin: 0; width: 380px; } }
-.su-x { position: absolute; top: 0; right: 0; width: 44px; height: 44px; background: none; border: 0; color: var(--muted); font-size: 1.75rem; line-height: 1; cursor: pointer; z-index: 1; }
+.announce:focus-visible { outline: 2px solid var(--lime); outline-offset: -2px; }
+.ab-track { display: inline-flex; width: max-content; animation: ab-scroll 40s linear infinite; will-change: transform; }
+.ab-group { display: inline-flex; flex: none; }
+.ab-item { flex: none; padding-right: 56px; }
+.ab-item::after { content: ""; display: inline-block; width: 6px; height: 6px; margin-left: 56px; background: var(--lime); transform: rotate(45deg); vertical-align: middle; }
+.announce:hover .ab-track, .announce:focus-visible .ab-track { animation-play-state: paused; }
+@keyframes ab-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .announce { text-align: center; }
+  .ab-track { animation: none; width: auto; display: block; }
+  .ab-group:nth-child(2), .ab-item:nth-child(n+2) { display: none; }
+  .ab-group { display: inline; }
+  .ab-item { padding: 0; }
+  .ab-item::after { display: none; }
+}
+html.su-lock { overflow: hidden; }
+.su-overlay {
+  position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center;
+  padding: 16px; background: rgba(0, 0, 0, .78); opacity: 0; transition: opacity .25s ease;
+}
+.su-overlay[hidden] { display: none; }
+.su-overlay.on { opacity: 1; }
+.su-box {
+  position: relative; width: 100%; max-width: 380px; max-height: 100%; overflow-y: auto;
+  background: #0a0a0a; border: 1px solid #2a2a2a; border-top: 2px solid var(--lime); padding: 22px 20px 16px;
+  transform: translateY(14px); transition: transform .3s cubic-bezier(.22, .61, .36, 1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .7);
+}
+.su-overlay.on .su-box { transform: none; }
+.su-x { position: absolute; top: 2px; right: 4px; width: 44px; height: 44px; background: none; border: 0; color: var(--muted); font-size: 1.75rem; line-height: 1; cursor: pointer; }
 .su-x:hover { color: var(--text); }
-.su-head { display: block; width: 100%; padding: 12px 48px 12px 14px; background: none; border: 0; color: var(--text); font: inherit; text-align: left; cursor: pointer; }
-.su-head strong { display: block; font-size: 1.0625rem; }
-.su-sub { display: block; margin-top: 3px; color: var(--muted); font-size: .875rem; line-height: 1.35; }
-.su-cta { display: inline-block; margin-top: 6px; color: var(--lime); font-size: .875rem; text-decoration: underline; text-underline-offset: 3px; }
-.su-tab.open .su-cta { display: none; }
-.su-panel { padding: 0 14px 14px; }
-.su-panel[hidden] { display: none; }
+.su-box h2 { margin: 0 40px 6px 0; font-size: 1.25rem; }
+.su-text { margin: 0 0 6px; color: var(--muted); font-size: .9rem; line-height: 1.45; }
 .su-form label { display: block; margin: 10px 0 4px; font-size: .875rem; }
 .su-form label span { color: var(--muted); }
 .su-form input[type=email], .su-form input[type=tel] {
@@ -384,10 +403,10 @@ main { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
 .su-err { margin: 8px 0 0; color: #ff8a8a; font-size: .875rem; }
 .su-go { width: 100%; margin-top: 12px; cursor: pointer; }
 .su-go:disabled { opacity: .6; cursor: wait; }
-.su-priv { margin: 8px 0 0; color: var(--muted); font-size: .75rem; }
+.su-priv { margin: 8px 0 0; color: var(--muted); font-size: .75rem; text-align: center; }
 .su-priv a { color: var(--muted); text-decoration-color: var(--lime); }
-.su-done { margin: 4px 0 0; font-size: 1rem; }
-@media (prefers-reduced-motion: reduce) { .su-tab { transition: none; } }
+.su-done { margin: 12px 0 8px; font-size: 1rem; }
+@media (prefers-reduced-motion: reduce) { .su-overlay, .su-box { transition: none; } }
 
 /* ---------------- LOGO IMAGE (assets/logo.png) ---------------- */
 .wordmark { transform: none; text-shadow: none; padding: 0; line-height: 0; }
