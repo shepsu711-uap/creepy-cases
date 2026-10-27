@@ -18,7 +18,14 @@ var SIGNUP = {
 };
 (function () {
   if (/policies\.html|privacy\.html/.test(location.pathname)) return;
-  var preview = /[?&]signup=preview/.test(location.search);
+  /* Preview mode: open any page with ?signup=preview once and this phone/browser remembers it, so the bar shows on
+     every page you tap to. Turn it off with ?signup=off (or the PREVIEW tag at the bottom-left). Visitors never have it. */
+  var PKEY = 'cc-signup-preview', preview = false;
+  try {
+    if (/[?&]signup=off/.test(location.search)) { localStorage.removeItem(PKEY); }
+    else if (/[?&]signup=preview/.test(location.search)) { localStorage.setItem(PKEY, '1'); preview = true; }
+    else { preview = localStorage.getItem(PKEY) === '1'; }
+  } catch (e) { preview = /[?&]signup=preview/.test(location.search); }
   var connected = SIGNUP.FORM_URL.indexOf('PASTE') === -1;
   if (!connected && !preview) return;
   var KEY = 'cc-signup-until';
@@ -30,8 +37,8 @@ var SIGNUP = {
   if (preview || !snoozed()) {
     var item = '<span class="ab-item">' + SIGNUP.BAR_TEXT + '</span>', group = '';
     for (var n = 0; n < 8; n++) group += item;
-    bar = document.createElement('button');
-    bar.type = 'button'; bar.className = 'announce';
+    bar = document.createElement('div');
+    bar.className = 'announce'; bar.setAttribute('role', 'button'); bar.tabIndex = 0;
     bar.setAttribute('aria-haspopup', 'dialog');
     bar.setAttribute('aria-label', SIGNUP.BAR_TEXT.replace('\u2192', 'to').replace('\u00b7', '.').toLowerCase());
     bar.innerHTML = '<span class="ab-track" aria-hidden="true"><span class="ab-group">' + group + '</span><span class="ab-group">' + group + '</span></span>';
@@ -65,7 +72,9 @@ var SIGNUP = {
   function open() {
     lastFocus = document.activeElement; o.hidden = false;
     if (!preview && window.ccTrack) window.ccTrack('open_signup_popup');
-    requestAnimationFrame(function () { o.classList.add('on'); try { o.querySelector('#su-email').focus({ preventScroll: true }); } catch (e) {} });
+    /* on phones don't auto-focus: it would pop the keyboard up before the person has seen the form */
+    var touch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    requestAnimationFrame(function () { o.classList.add('on'); if (!touch) try { o.querySelector('#su-email').focus({ preventScroll: true }); } catch (e) {} });
     document.documentElement.classList.add('su-lock');
   }
   function close() {
@@ -73,13 +82,22 @@ var SIGNUP = {
     setTimeout(function () { o.hidden = true; }, 250);
     if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
   }
-  if (bar) bar.addEventListener('click', open);
+  if (bar) {
+    bar.addEventListener('click', open);
+    bar.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+  }
+  if (preview) {                                             // obvious "you're in preview mode" tag, only you see it
+    var tag = document.createElement('button');
+    tag.type = 'button'; tag.className = 'su-preview'; tag.textContent = 'PREVIEW \u00b7 only you see this \u00b7 tap to turn off';
+    tag.addEventListener('click', function () { try { localStorage.removeItem(PKEY); } catch (e) {} location.href = location.pathname + '?signup=off'; });
+    document.body.appendChild(tag);
+  }
   Array.prototype.forEach.call(document.querySelectorAll('[data-signup-link]'), function (a) {
     a.hidden = false;
     a.addEventListener('click', function (e) { e.preventDefault(); open(); });
   });
   o.querySelector('.su-x').onclick = close;
-  o.addEventListener('mousedown', function (e) { if (e.target === o) close(); });
+  o.addEventListener('click', function (e) { if (e.target === o) close(); });
   document.addEventListener('keydown', function (e) {
     if (o.hidden) return;
     if (e.key === 'Escape') close();

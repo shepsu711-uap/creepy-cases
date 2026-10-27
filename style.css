@@ -353,16 +353,19 @@ main { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
 
 /* ---------------- ANNOUNCEMENT BAR + SIGN-UP FORM (signup.js) ---------------- */
 .announce {
-  display: block; width: 100%; height: 30px; padding: 0; margin: 0; overflow: hidden; position: relative; z-index: 1;
+  display: block; box-sizing: border-box; width: 100%; height: 31px; padding: 0; margin: 0; overflow: hidden; position: relative; z-index: 1;
   background: #000; color: var(--text); border: 0; border-bottom: 1px solid var(--lime); cursor: pointer;
+  -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; touch-action: manipulation;
   font: inherit; font-size: .75rem; font-weight: 600; letter-spacing: .08em; line-height: 30px; text-align: left; white-space: nowrap;
 }
 .announce:focus-visible { outline: 2px solid var(--lime); outline-offset: -2px; }
-.ab-track { display: inline-flex; width: max-content; animation: ab-scroll 40s linear infinite; will-change: transform; }
+.ab-track { display: inline-flex; width: -webkit-max-content; width: max-content; -webkit-animation: ab-scroll 40s linear infinite; animation: ab-scroll 40s linear infinite; will-change: transform; }
 .ab-group { display: inline-flex; flex: none; }
 .ab-item { flex: none; padding-right: 56px; }
 .ab-item::after { content: ""; display: inline-block; width: 6px; height: 6px; margin-left: 56px; background: var(--lime); transform: rotate(45deg); vertical-align: middle; }
-.announce:hover .ab-track, .announce:focus-visible .ab-track { animation-play-state: paused; }
+.announce:hover .ab-track { animation-play-state: paused; }
+.announce:focus-visible .ab-track { animation-play-state: paused; }
+@-webkit-keyframes ab-scroll { from { -webkit-transform: translateX(0); } to { -webkit-transform: translateX(-50%); } }
 @keyframes ab-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) {
   .announce { text-align: center; }
@@ -373,12 +376,14 @@ main { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
   .ab-item::after { display: none; }
 }
 html.su-lock { overflow: hidden; }
+.su-preview { position: fixed; left: 8px; bottom: 8px; z-index: 90; max-width: calc(100% - 16px); padding: 7px 10px; background: var(--lime); color: #000; border: 0; font: inherit; font-size: .6875rem; font-weight: 700; letter-spacing: .04em; text-align: left; cursor: pointer; }
 .su-overlay {
-  position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center;
+  position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 100; display: flex; align-items: center; justify-content: center;
   padding: 16px; background: rgba(0, 0, 0, .78); opacity: 0; transition: opacity .25s ease;
 }
 .su-overlay[hidden] { display: none; }
 .su-overlay.on { opacity: 1; }
+@media (max-width: 600px) { .su-overlay { align-items: flex-start; padding-top: 44px; -webkit-overflow-scrolling: touch; } }
 .su-box {
   position: relative; width: 100%; max-width: 380px; max-height: 100%; overflow-y: auto;
   background: #0a0a0a; border: 1px solid #2a2a2a; border-top: 2px solid var(--lime); padding: 22px 20px 16px;
