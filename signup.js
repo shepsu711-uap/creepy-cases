@@ -17,19 +17,25 @@ var SIGNUP = {
   HIDE_DAYS: 7                                 // after someone signs up, hide the bar this many days
 };
 (function () {
+  var cc = window.__cc = window.__cc || { errors: [] };   /* tiny status record, read by ?signup=debug (see analytics.js) */
+  cc.signup = true; cc.formSet = SIGNUP.FORM_URL.indexOf('PASTE') === -1;
+  function init() {
   if (/policies\.html|privacy\.html/.test(location.pathname)) return;
   /* Preview mode: open any page with ?signup=preview once and this phone/browser remembers it, so the bar shows on
      every page you tap to. Turn it off with ?signup=off (or the PREVIEW tag at the bottom-left). Visitors never have it. */
   var PKEY = 'cc-signup-preview', preview = false;
   try {
-    if (/[?&]signup=off/.test(location.search)) { localStorage.removeItem(PKEY); }
-    else if (/[?&]signup=preview/.test(location.search)) { localStorage.setItem(PKEY, '1'); preview = true; }
-    else { preview = localStorage.getItem(PKEY) === '1'; }
-  } catch (e) { preview = /[?&]signup=preview/.test(location.search); }
-  var connected = SIGNUP.FORM_URL.indexOf('PASTE') === -1;
+    var href = String(location.href);      /* whole address, so extra ?params or a #hash can't hide it */
+    if (/[?&#]signup=off/i.test(href)) { localStorage.removeItem(PKEY); }
+    else if (/[?&#]signup=preview/i.test(href)) { localStorage.setItem(PKEY, '1'); preview = true; cc.previewSrc = 'address'; }
+    else { preview = localStorage.getItem(PKEY) === '1'; if (preview) cc.previewSrc = 'remembered'; }
+  } catch (e) { preview = /signup=preview/i.test(String(location.href)); cc.previewSrc = 'address (storage blocked)'; cc.errors.push('storage blocked: ' + (e && e.message)); }
+  cc.preview = preview;
+  var connected = cc.formSet;
   if (!connected && !preview) return;
   var KEY = 'cc-signup-until';
   function snoozed() { try { return Date.now() < Number(localStorage.getItem(KEY) || 0); } catch (e) { return false; } }
+  cc.snoozed = snoozed();
   function snooze() { try { localStorage.setItem(KEY, String(Date.now() + SIGNUP.HIDE_DAYS * 864e5)); } catch (e) {} }
 
   /* ---- the announcement bar (first thing in <body>, above the header) ---- */
@@ -44,6 +50,7 @@ var SIGNUP = {
     bar.innerHTML = '<span class="ab-track" aria-hidden="true"><span class="ab-group">' + group + '</span><span class="ab-group">' + group + '</span></span>';
     document.body.insertBefore(bar, document.body.firstChild);
   }
+  cc.barShown = !!bar;
 
   /* ---- the sign-up form (opens in a small sheet) ---- */
   var o = document.createElement('div');
@@ -126,4 +133,6 @@ var SIGNUP = {
       .then(function (r) { if (!r.ok) throw 0; if (window.ccTrack) window.ccTrack('signup_submit'); ok('You\u2019re on the list. Thank you! We\u2019ll send your $5 off by email or text.'); })
       .catch(function () { btn.disabled = false; btn.textContent = SIGNUP.BUTTON; showErr('Something went wrong. Please try again.'); });
   });
+  }
+  try { init(); } catch (e) { cc.errors.push('signup.js: ' + (e && e.message)); }
 })();

@@ -10,7 +10,7 @@
   bar.setAttribute('aria-hidden', 'true');
   var w = h.querySelector('.wordmark'), n = h.querySelector('nav');
   if (w) { var w2 = w.cloneNode(true); w2.tabIndex = -1; bar.appendChild(w2); }
-  if (n) { var n2 = n.cloneNode(true); n2.querySelectorAll('a').forEach(function (a) { a.tabIndex = -1; }); bar.appendChild(n2); }
+  if (n) { var n2 = n.cloneNode(true); Array.prototype.forEach.call(n2.querySelectorAll('a'), function (a) { a.tabIndex = -1; }); bar.appendChild(n2); }
   document.body.appendChild(bar);
   var last = 0, ticking = false, on = false, upDistance = 0;
   function set(v) { if (v !== on) { on = v; bar.classList.toggle('show', v); } }

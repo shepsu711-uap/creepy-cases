@@ -10,6 +10,47 @@ var ANALYTICS = {
   META_PIXEL_ID:    '',   // optional. Facebook/Instagram Pixel ID (numbers)
   GA4_ID:           ''    // optional. Google Analytics 4 ID, looks like 'G-XXXXXXXXXX'
 };
+/* ---- ?signup=debug : tiny on-screen checklist so a phone can be checked by screenshot. Does nothing otherwise. ---- */
+(function () {
+  var cc = window.__cc = window.__cc || { errors: [] };
+  cc.analytics = true;
+  window.addEventListener('error', function (e) {
+    var t = e && e.target;
+    if (t && t !== window && (t.src || t.href)) cc.errors.push('failed to load ' + String(t.src || t.href).split('/').pop());
+    else cc.errors.push(String((e && e.message) || 'error') + ' @' + String((e && e.filename) || '').split('/').pop() + ':' + ((e && e.lineno) || ''));
+  }, true);
+  if (!/[?&#]signup=debug/i.test(String(location.href))) return;
+  function yn(v) { return v ? 'YES' : 'no'; }
+  function show() {
+    try {
+      var ls = 'no', stored = '-';
+      try { localStorage.setItem('cc-t', '1'); localStorage.removeItem('cc-t'); ls = 'YES'; stored = localStorage.getItem('cc-signup-preview') === '1' ? 'YES' : 'no'; } catch (e) {}
+      var bar = document.querySelector('.announce'), r = bar && bar.getBoundingClientRect();
+      var L = [
+        'SIGN-UP BAR CHECK  (tap to close)',
+        'page: ' + location.pathname.split('/').pop() + '  width: ' + window.innerWidth,
+        'analytics.js loaded: ' + yn(cc.analytics),
+        'header.js loaded: ' + yn(document.querySelector('.sticky-bar')),
+        'signup.js loaded: ' + yn(cc.signup) + (cc.signup ? '' : '  (not used on this page)'),
+        'FORM_URL set: ' + yn(cc.formSet),
+        'preview on: ' + yn(cc.preview) + (cc.previewSrc ? ' (' + cc.previewSrc + ')' : ''),
+        'preview remembered: ' + stored + '   storage ok: ' + ls,
+        'hidden after signup: ' + yn(cc.snoozed),
+        'bar on page: ' + yn(bar) + (r ? ' (' + Math.round(r.width) + 'x' + Math.round(r.height) + ')' : ''),
+        'errors: ' + (cc.errors.length ? cc.errors.join(' | ') : 'none'),
+        (!cc.formSet && !cc.preview ? 'WHY NO BAR: form address not set yet, so visitors see nothing. Add ?signup=preview to see it.' : ''),
+        'browser: ' + String(navigator.userAgent).slice(0, 110)
+      ];
+      var d = document.createElement('div');
+      d.setAttribute('style', 'position:fixed;left:6px;right:6px;bottom:6px;z-index:2147483647;background:#fff;color:#000;border:3px solid #b6ff3b;padding:8px 10px;font:12px/1.4 monospace;white-space:pre-wrap;word-break:break-word;max-height:70%;overflow:auto');
+      d.textContent = L.filter(Boolean).join('\n');
+      d.onclick = function () { d.parentNode && d.parentNode.removeChild(d); };
+      document.body.appendChild(d);
+    } catch (e) {}
+  }
+  if (document.readyState === 'complete') setTimeout(show, 300);
+  else window.addEventListener('load', function () { setTimeout(show, 300); });
+})();
 (function () {
   var A = ANALYTICS, noop = function () {};
   window.ccTrack = noop;                       // other scripts call ccTrack('event_name'); safe when tracking is off
