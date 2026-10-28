@@ -435,3 +435,4 @@ html.su-lock { overflow: hidden; }
 /* Header nav: four links fit on one line on small phones */
 .site-header nav { flex-wrap: wrap; gap: 0; }
 .site-header nav a { white-space: nowrap; padding: 10px 6px; font-size: .875rem; letter-spacing: .02em; }
+.media .teaser-wide { object-position: 50% 30%; }
