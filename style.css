@@ -431,3 +431,7 @@ html.su-lock { overflow: hidden; }
 
 /* ---------------- Coming Soon teaser tile ---------------- */
 .media .teaser-img { object-position: 50% 15%; }
+
+/* Header nav: four links fit on one line on small phones */
+.site-header nav { flex-wrap: wrap; gap: 0; }
+.site-header nav a { white-space: nowrap; padding: 10px 6px; font-size: .875rem; letter-spacing: .02em; }
